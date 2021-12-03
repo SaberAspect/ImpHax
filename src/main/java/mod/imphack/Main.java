@@ -105,7 +105,6 @@ public class Main {
 		backgrounds.add(new ResourceLocation("textures/6.png"));
 		backgrounds.add(new ResourceLocation("textures/7.png"));
 		backgrounds.add(new ResourceLocation("textures/8.png"));
-		backgrounds.add(new ResourceLocation("textures/9.jpg"));
 		for (ResourceLocation r : backgrounds)
 			this.mc.getTextureManager().bindTexture(r);
 	}

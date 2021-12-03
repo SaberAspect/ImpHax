@@ -202,7 +202,7 @@ public class ModuleManager {
 	}
 
 	public void render(RenderWorldLastEvent event) {
-		mc.profiler.startSection("ImpHack Revised");
+		mc.profiler.startSection("ImpHax");
 		mc.profiler.startSection("setup");
 
 		GlStateManager.disableTexture2D();

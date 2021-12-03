@@ -35,7 +35,7 @@ public class Config {
 	private final Path configFile;
 
 	public Config() {
-		modFolder = Minecraft.getMinecraft().gameDir.toPath().resolve("imphack");
+		modFolder = Minecraft.getMinecraft().gameDir.toPath().resolve("ImpHax");
 		configFile = Paths.get(modFolder + File.separator + "moduleConfig.txt");
 		try {
 			Files.createDirectories(modFolder);

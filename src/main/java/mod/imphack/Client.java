@@ -27,7 +27,7 @@ public class Client {
 	public static void addChatMessage(String s, boolean doPrefixture) {
 		String prefixture;
 		if (doPrefixture) {
-			prefixture = "\247b[ImpHack Revised]: ";
+			prefixture = "\247b[ImpHax]: ";
 		} else {
 			prefixture = "";
 		}
@@ -35,7 +35,7 @@ public class Client {
 	}
 
 	public static void addChatMessage(String s) {
-		Minecraft.getMinecraft().player.sendMessage(new TextComponentString("\247b[ImpHack Revised]: " + s));
+		Minecraft.getMinecraft().player.sendMessage(new TextComponentString("\247b[ImpHax]: " + s));
 	}
 
 	public static volatile boolean getNextKeyPressForKeybinding = false;
@@ -64,7 +64,7 @@ public class Client {
 	public static void addChatMessage(int entityId, String string, boolean prefix) {
 		String prefixture;
 		if (prefix) {
-			prefixture = "\247b[ImpHack Revised]: ";
+			prefixture = "\247b[ImpHax]: ";
 		} else {
 			prefixture = "";
 		}

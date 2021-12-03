@@ -45,7 +45,6 @@ public class ImpHackSplashScreen extends GuiScreen {
 		backgrounds.add(new ResourceLocation("textures/6.png"));
 		backgrounds.add(new ResourceLocation("textures/7.png"));
 		backgrounds.add(new ResourceLocation("textures/8.png"));
-		backgrounds.add(new ResourceLocation("textures/9.jpg"));
 
 		Random random = new Random();
 		this.background = backgrounds.get(random.nextInt(backgrounds.size()));

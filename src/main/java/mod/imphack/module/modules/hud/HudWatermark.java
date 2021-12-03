@@ -26,10 +26,10 @@ public class HudWatermark {
 						"Watermark")).enabled)
                 	if(Main.moduleManager.getModule("ClientFont").isToggled()) {
 
-					FontUtils.drawStringWithShadow(true,"ImpHack Revised " + Reference.DEV_VERSION, 2, 1, new ColorUtil(128, 0, 128, 255));
+					FontUtils.drawStringWithShadow(true,"ImpHax " + Reference.DEV_VERSION, 2, 1, new ColorUtil(128, 0, 128, 255));
                 	}
                 	else {
-    					FontUtils.drawStringWithShadow(false,"ImpHack Revised " + Reference.DEV_VERSION, 2, 1, new ColorUtil(128, 0, 128, 255));
+    					FontUtils.drawStringWithShadow(false,"ImpHax " + Reference.DEV_VERSION, 2, 1, new ColorUtil(128, 0, 128, 255));
 
                 	}
 

@@ -162,7 +162,7 @@ public class NoteBot extends Module {
 			NbInstrument.TuneInstrument();
 
 		} else if (mode.is("Play")) {
-			musicFolder = Minecraft.getMinecraft().gameDir.toPath().resolve("imphack" + File.separator + "notebot");
+			musicFolder = Minecraft.getMinecraft().gameDir.toPath().resolve("Imphax" + File.separator + "notebot");
 			musicFile = Paths.get(musicFolder + File.separator + file.value);
 			try {
 				Files.createDirectories(musicFolder);
@@ -179,7 +179,7 @@ public class NoteBot extends Module {
 				e.printStackTrace();
 			}
 		} else if (mode.is("Listen")) {
-			musicFolder = Minecraft.getMinecraft().gameDir.toPath().resolve("imphack" + File.separator + "notebot");
+			musicFolder = Minecraft.getMinecraft().gameDir.toPath().resolve("Imphax" + File.separator + "notebot");
 			musicFile = Paths.get(musicFolder + File.separator + file.value);
 			try {
 				Files.createDirectories(musicFolder);
