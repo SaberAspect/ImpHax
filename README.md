@@ -22,7 +22,7 @@ The prefix of the client is "." (Period)
 
 
 
-There is no initial keybind for the click gui so in order to bind the clickgui to a key you need to type ".bind set clickgui keyname"
+There is no initial keybind for the click gui so in order to bind the clickgui to a key you need to type ".bind clickgui keyname"
 
 how to build 
 
