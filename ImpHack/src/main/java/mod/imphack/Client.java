@@ -22,7 +22,7 @@ public class Client {
 		new CommandManager();
 		
 
-	}
+	}//test
 
 	public static void addChatMessage(String s, boolean doPrefixture) {
 		String prefixture;
