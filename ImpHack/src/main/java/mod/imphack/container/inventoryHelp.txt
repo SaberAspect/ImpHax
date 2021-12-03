@@ -1,0 +1,15 @@
+Each number corresponds to slots in the inventory
+
+----------------------------------------------------------
+
+0: Crafting Output
+
+1–4: Crafting Input
+
+5–8: Armor
+
+9–35: Main Inventory
+
+36–44: Hotbar
+
+45: Offhand
