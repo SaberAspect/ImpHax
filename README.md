@@ -2,10 +2,10 @@
 
 [![minecraft](https://img.shields.io/badge/Minecraft-1.12.2-blueviolet.svg)](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.12.2.html)
 [![Discord](https://img.shields.io/discord/840168131652747264?color=9900ee&label=discord&style=flat-round)](https://discord.gg/DyrmKHkG6s)
-![GitHub Lines](https://img.shields.io/tokei/lines/github/SaberAspect/ImpHack?color=9900ee)
-![GitHub Language](https://img.shields.io/github/languages/top/SaberAspect/ImpHack?color=9900ee)
+![GitHub Lines](https://img.shields.io/tokei/lines/github/SaberAspect/ImpHax?color=9900ee)
+![GitHub Language](https://img.shields.io/github/languages/top/SaberAspect/ImpHax?color=9900ee)
 ![minecraft](https://img.shields.io/badge/Client--Prefix-.-blueviolet)
-[![Downloads](https://img.shields.io/github/downloads/SaberAspect/ImpHack/total?color=9900ee)](https://github.com/SaberAspect/ImpHack/release/latest)
+[![Downloads](https://img.shields.io/github/downloads/SaberAspect/ImpHax/total?color=9900ee)](https://github.com/SaberAspect/ImpHax/release/latest)
 
 # Imphax
 The Offical Hack Client Of The Imperials
