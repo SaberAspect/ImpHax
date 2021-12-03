@@ -48,7 +48,7 @@ public class Main {
 
 	
 	
-
+//
 	public static CommandManager cmdManager;
 	public static SettingManager settingManager;
 	public static ImpHackEventManager eventManager;
