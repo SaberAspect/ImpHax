@@ -7,7 +7,7 @@
 ![minecraft](https://img.shields.io/badge/Client--Prefix-.-blueviolet)
 [![Downloads](https://img.shields.io/github/downloads/SaberAspect/ImpHack/total?color=9900ee)](https://github.com/SaberAspect/ImpHack/release/latest)
 
-# Imphack
+# Imphax
 The Offical Hack Client Of The Imperials
 
 ImpHack is a client that runs off Minecraft Forge 1.12.2, it is intended for use on servers which allow client-side modification. 
