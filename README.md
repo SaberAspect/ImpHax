@@ -8,7 +8,7 @@
 [![Downloads](https://img.shields.io/github/downloads/SaberAspect/ImpHack/total?color=9900ee)](https://github.com/SaberAspect/ImpHack/release/latest)
 
 # Imphack
-(definitely not) The official client of the 2b2t Imperials.
+The Offical Hack Client Of The Imperials
 
 ImpHack is a client that runs off Minecraft Forge 1.12.2, it is intended for use on servers which allow client-side modification. 
 <br>
@@ -32,4 +32,4 @@ how to build
 3. Run `./gradlew build`
 
 
-Message SaberAspect if you have any questions :)
+Message SaberAspect or mrmesh1117 if you have any questions :)
