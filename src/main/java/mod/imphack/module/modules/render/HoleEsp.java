@@ -6,6 +6,10 @@ import mod.imphack.module.Module;
 import mod.imphack.setting.settings.BooleanSetting;
 import mod.imphack.setting.settings.ColorSetting;
 import mod.imphack.setting.settings.FloatSetting;
+import mod.imphack.setting.settings.IntSetting;
+import mod.imphack.setting.settings.ModeSetting;
+import mod.imphack.util.Key;
+import mod.imphack.util.Wrapper;
 import mod.imphack.util.render.ColorUtil;
 import mod.imphack.util.render.Geometry;
 import mod.imphack.util.render.RenderUtil;
@@ -20,20 +24,19 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class HoleEsp extends Module{
 	
-	public final FloatSetting size = new FloatSetting("size", this, 0.1f);
-	public final BooleanSetting outline = new BooleanSetting("outline", this, true);
-
-	public final ColorSetting obbyColor = new ColorSetting("obbyColor", this, new ColorUtil(69, 48, 146, 110));
-	public final ColorSetting bedrockColor = new ColorSetting("bedrockColor", this, new ColorUtil(0, 255, 0, 110));
-	public HoleEsp() {
-		super("HoleEsp", "Shows safe holes", Category.RENDER);
-		
-		addSetting(size);
-		addSetting(outline);
-
-	}
 	
-	private static final Minecraft mc = Minecraft.getMinecraft();
+	public FloatSetting size = new FloatSetting("size", this, 0.1f);
+	public BooleanSetting outline = new BooleanSetting("outline", this, true);
+
+	public ColorSetting obbyColor = new ColorSetting("obbyColor", this, new ColorUtil(0, 121, 194, 50));
+	public ColorSetting bedrockColor = new ColorSetting("bedrockColor", this, new ColorUtil(0, 200, 255, 50));
+	
+	public HoleEsp() {
+		super ("HoleEsp", "shows an esp of holes.", Category.RENDER);
+		this.addSetting(size, outline);
+	}
+
+	private static final Minecraft mc = Wrapper.mc;
 
 	private final BlockPos[] surroundOffset ={
 			new BlockPos(0, -1, 0), // down
@@ -42,8 +45,7 @@ public class HoleEsp extends Module{
 			new BlockPos(0, 0, 1), // south
 			new BlockPos(-1, 0, 0) // west
 	};
-	
-	
+
 	private ConcurrentHashMap<BlockPos, Boolean> safeHoles;
 
 	public List<BlockPos> getSphere(BlockPos loc, float r, int h, boolean hollow, boolean sphere, int plus_y) {
@@ -110,12 +112,10 @@ public class HoleEsp extends Module{
 				safeHoles.put(pos, isBedrock);
 			}
 		}
-		
 	}
-	
 
 	@Override
-	public void render(ImpHackEventRender event) {
+	public void render(final ImpHackEventRender event) {
 		if (mc.player == null || safeHoles == null){
 			return;
 		}
@@ -123,10 +123,14 @@ public class HoleEsp extends Module{
 			return;
 		}
 		
-		safeHoles.forEach((blockPos, isBedrock) -> drawBox(blockPos, isBedrock));
-		safeHoles.forEach((blockPos, isBedrock) -> drawOutline(blockPos, isBedrock));
+		safeHoles.forEach((blockPos, isBedrock) -> {
+			drawBox(blockPos,1, isBedrock);
+		});
+		safeHoles.forEach((blockPos, isBedrock) -> {
+			drawOutline(blockPos,2,isBedrock);
+		});
 	}
-	
+
 	private ColorUtil getColor (boolean isBedrock) {
 		ColorUtil c;
 		if (isBedrock) c= bedrockColor.getValue();
@@ -134,17 +138,16 @@ public class HoleEsp extends Module{
 		return new ColorUtil(c);
 	}
 
-	private void drawBox(BlockPos blockPos, boolean isBedrock) {
+	private void drawBox(BlockPos blockPos, int width, boolean isBedrock) {
 			ColorUtil color=getColor(isBedrock);
 			RenderUtil.drawBox(blockPos, size.getValue(), color, Geometry.Quad.ALL);
 		}
 
-	private void drawOutline(BlockPos blockPos, boolean isBedrock) {
+	private void drawOutline(BlockPos blockPos, int width, boolean isBedrock) {
 		ColorUtil color=getColor(isBedrock);
 		if(outline.isEnabled()) {
-			RenderUtil.drawBoundingBox(blockPos, size.getValue(), 2, color);
+			RenderUtil.drawBoundingBox(blockPos, size.getValue(), width, color);
 		}
 	}
-
 
 }

@@ -28,6 +28,11 @@ public class ImpHackFontRenderer extends ImpHackFont {
 			float shadowWidth = drawString(text, x + 1D, y + 1D, color, true);
 			return Math.max(shadowWidth, drawString(text, x, y, color, false));
 		}
+		
+		public float drawStringWithShadow(String text, float x, float y, int color) {
+			float shadowWidth = drawString(text, x + 1f, y + 1f, color, true);
+			return Math.max(shadowWidth, drawString(text, x, y, color, false));
+		}
 
 		public float drawString(String text, float x, float y, ColorUtil color) {
 			return drawString(text, x, y, color, false);
@@ -49,6 +54,127 @@ public class ImpHackFontRenderer extends ImpHackFont {
 		}
 
 		public float drawString(String text, double x, double y, ColorUtil gsColor, boolean shadow) {
+			x -= 1;
+			y -= 2;
+			ColorUtil color=new ColorUtil(gsColor);
+			if (text == null) return 0.0F;
+			if (color.getRed()==255 && color.getGreen()==255 && color.getBlue()==255 && color.getAlpha()==32) color=new ColorUtil(255,255,255);
+			if (color.getAlpha()<4) color=new ColorUtil(color,255);
+			if (shadow) color=new ColorUtil(color.getRed()/4,color.getGreen()/4,color.getBlue()/4,color.getAlpha());
+
+			CharData[] currentData = this.charData;
+			boolean randomCase = false;
+			boolean bold = false;
+			boolean italic = false;
+			boolean strikethrough = false;
+			boolean underline = false;
+			boolean render = true;
+			x *= 2.0D;
+			y *= 2.0D;
+			if (render) {
+				GlStateManager.pushMatrix();
+				GlStateManager.scale(0.5D, 0.5D, 0.5D);
+				GlStateManager.enableBlend();
+				GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				GlStateManager.color(color.getRed()/255.0f,color.getGreen()/255.0f,color.getBlue()/255.0f,color.getAlpha()/255.0f);
+				int size = text.length();
+				GlStateManager.enableTexture2D();
+				GlStateManager.bindTexture(tex.getGlTextureId());
+				//GL11.glBindTexture(GL11.GL_TEXTURE_2D, tex.getGlTextureId());
+				for (int i = 0; i < size; i++) {
+					char character = text.charAt(i);
+					if ((character == '\u00A7') && (i < size)) {
+						int colorIndex = 21;
+						try {
+							colorIndex = "0123456789abcdefklmnor".indexOf(text.charAt(i + 1));
+						}
+						catch (Exception e) {
+
+						}
+						if (colorIndex < 16) {
+							bold = false;
+							italic = false;
+							randomCase = false;
+							underline = false;
+							strikethrough = false;
+							GlStateManager.bindTexture(tex.getGlTextureId());
+							// GL11.glBindTexture(GL11.GL_TEXTURE_2D,
+							// tex.getGlTextureId());
+							currentData = this.charData;
+							if ((colorIndex < 0) || (colorIndex > 15)) colorIndex = 15;
+							if (shadow) colorIndex += 16;
+							int colorcode = this.colorCode[colorIndex];
+							GlStateManager.color((colorcode >> 16 & 0xFF) / 255.0F, (colorcode >> 8 & 0xFF) / 255.0F, (colorcode & 0xFF) / 255.0F, color.getAlpha());
+						}
+						else if (colorIndex == 16) {
+							randomCase = true;
+						}
+						else if (colorIndex == 17) {
+							bold = true;
+							if (italic) {
+								GlStateManager.bindTexture(texItalicBold.getGlTextureId());
+								// GL11.glBindTexture(GL11.GL_TEXTURE_2D,
+								// texItalicBold.getGlTextureId());
+								currentData = this.boldItalicChars;
+							}
+							else {
+								GlStateManager.bindTexture(texBold.getGlTextureId());
+								// GL11.glBindTexture(GL11.GL_TEXTURE_2D,
+								// texBold.getGlTextureId());
+								currentData = this.boldChars;
+							}
+						}
+						else if (colorIndex == 18) {
+							strikethrough = true;
+						}
+						else if (colorIndex == 19) {
+							underline = true;
+						}
+						else if (colorIndex == 20) {
+							italic = true;
+							if (bold) {
+								GlStateManager.bindTexture(texItalicBold.getGlTextureId());
+								// GL11.glBindTexture(GL11.GL_TEXTURE_2D,
+								// texItalicBold.getGlTextureId());
+								currentData = this.boldItalicChars;
+							}
+							else {
+								GlStateManager.bindTexture(texItalic.getGlTextureId());
+								// GL11.glBindTexture(GL11.GL_TEXTURE_2D,
+								// texItalic.getGlTextureId());
+								currentData = this.italicChars;
+							}
+						}
+						else if (colorIndex == 21) {
+							bold = false;
+							italic = false;
+							randomCase = false;
+							underline = false;
+							strikethrough = false;
+							GlStateManager.color(color.getRed()/255.0f,color.getGreen()/255.0f,color.getBlue()/255.0f,color.getAlpha()/255.0f);
+							GlStateManager.bindTexture(tex.getGlTextureId());
+							// GL11.glBindTexture(GL11.GL_TEXTURE_2D,
+							// tex.getGlTextureId());
+							currentData = this.charData;
+						}
+						i++;
+					}
+					else if ((character < currentData.length) && (character >= 0)) {
+						GlStateManager.glBegin(GL11.GL_TRIANGLES);
+						drawChar(currentData, character, (float) x, (float) y);
+						GlStateManager.glEnd();
+						if (strikethrough) drawLine(x, y + currentData[character].height / 2, x + currentData[character].width - 8.0D, y + currentData[character].height / 2, 1.0F);
+						if (underline) drawLine(x, y + currentData[character].height - 2.0D, x + currentData[character].width - 8.0D, y + currentData[character].height - 2.0D, 1.0F);
+						x += currentData[character].width - 8 + this.charOffset;
+					}
+				}
+				GL11.glHint(GL11.GL_POLYGON_SMOOTH_HINT, GL11.GL_DONT_CARE);
+				GlStateManager.popMatrix();
+			}
+			return (float) x / 2.0F;
+		}
+		
+		public float drawString(String text, double x, double y, int gsColor, boolean shadow) {
 			x -= 1;
 			y -= 2;
 			ColorUtil color=new ColorUtil(gsColor);

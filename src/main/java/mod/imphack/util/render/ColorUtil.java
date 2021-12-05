@@ -11,7 +11,7 @@ public class ColorUtil extends Color {
 
     
     
-	public static ColorUtil getRainbow(int incr, int alpha) {
+    public static ColorUtil getRainbow(int incr, int alpha) {
 		ColorUtil color =  ColorUtil.fromHSB(((System.currentTimeMillis() + incr * 200)%(360*20))/(360f * 20),0.5f,1f);
 		return new ColorUtil(color.getRed(), color.getBlue(), color.getGreen(), alpha);
 	}

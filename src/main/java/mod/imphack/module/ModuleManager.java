@@ -21,6 +21,7 @@ import mod.imphack.module.modules.combat.Offhand;
 import mod.imphack.module.modules.combat.SelfFill;
 import mod.imphack.module.modules.combat.SpeedEXP;
 import mod.imphack.module.modules.combat.Surround;
+import mod.imphack.module.modules.combat.TotemPop;
 import mod.imphack.module.modules.hud.Hud;
 import mod.imphack.module.modules.movement.AutoWalk;
 import mod.imphack.module.modules.movement.BoatFly;
@@ -40,6 +41,7 @@ import mod.imphack.module.modules.player.FastPlace;
 import mod.imphack.module.modules.player.NoEntityTrace;
 import mod.imphack.module.modules.player.Scaffold;
 import mod.imphack.module.modules.player.XCarry;
+import mod.imphack.module.modules.render.CityESP;
 import mod.imphack.module.modules.render.EntityTracers;
 import mod.imphack.module.modules.render.Esp;
 import mod.imphack.module.modules.render.ExtraTab;
@@ -92,7 +94,7 @@ public class ModuleManager {
 		addModule(new AutoArmor());
 		addModule(new Offhand());
 		addModule(new HoleFiller());
-
+		addModule(new TotemPop());
 		 addModule(new SelfFill());
 
 		// movement
@@ -137,6 +139,7 @@ public class ModuleManager {
 		addModule(new ViewModel());
 		addModule(new FOV());
 		addModule(new NoRender());
+		//addModule(new CityESP());
 		
 		
 		// TODO norender

@@ -27,11 +27,11 @@ public class EntityTracers extends Module {
 	final BooleanSetting players = new BooleanSetting("Players", this, true);
 	final BooleanSetting items = new BooleanSetting("Items", this, true);
 	final BooleanSetting other = new BooleanSetting("Other Entities", this, true);
-	final ColorSetting monsterColor = new ColorSetting("Monster Color", this, new ColorUtil(255, 255, 255, 255));
-	final ColorSetting passiveColor = new ColorSetting("Passive Color", this, new ColorUtil(255, 255, 255, 255));
+	final ColorSetting monsterColor = new ColorSetting("Monster Color", this, new ColorUtil(255, 0, 0, 255));
+	final ColorSetting passiveColor = new ColorSetting("Passive Color", this, new ColorUtil(0, 255, 0, 255));
 	final ColorSetting playerColor = new ColorSetting("Player Color", this, new ColorUtil(255, 255, 255, 255));
-	final ColorSetting itemColor = new ColorSetting("Item Color", this, new ColorUtil(255, 255, 255, 255));
-	final ColorSetting otherColor = new ColorSetting("Other Color", this, new ColorUtil(255, 255, 255, 255));
+	final ColorSetting itemColor = new ColorSetting("Item Color", this, new ColorUtil(0, 0, 255, 255));
+	final ColorSetting otherColor = new ColorSetting("Other Color", this, new ColorUtil(255, 255, 0, 255));
 	final FloatSetting width = new FloatSetting("Tracer Width", this, 1f);
 
 	public EntityTracers() {
@@ -99,21 +99,21 @@ public class EntityTracers extends Module {
 	private int getColor(Entity e) {
 		if (e instanceof EntityPlayer) {
 			return new Color((float) playerColor.red / 255, (float) playerColor.green / 255,
-					(float) playerColor.blue / 255, 0.5f).getRGB();
+					(float) playerColor.blue / 255, 0.7f).getRGB();
 		}
 		if ((EntityUtil.isHostileMob(e) || EntityUtil.isNeutralMob(e))) {
 			return new Color((float) monsterColor.red / 255, (float) monsterColor.green / 255,
-					(float) monsterColor.blue / 255, 0.5F).getRGB();
+					(float) monsterColor.blue / 255, 0.7F).getRGB();
 		}
 		if (EntityUtil.isPassive(e)) {
 			return new Color((float) passiveColor.red / 255, (float) passiveColor.green / 255,
-					(float) passiveColor.blue / 255, 0.5F).getRGB();
+					(float) passiveColor.blue / 255, 0.7F).getRGB();
 		}
 		if (e instanceof EntityItem) {
 			return new Color((float) itemColor.red / 255, (float) itemColor.green / 255, (float) itemColor.blue / 255,
-					0.5F).getRGB();
+					0.7F).getRGB();
 		}
 		return new Color((float) otherColor.red / 255, (float) otherColor.green / 255, (float) otherColor.blue / 255,
-				0.5F).getRGB();
+				0.7F).getRGB();
 	}
 }

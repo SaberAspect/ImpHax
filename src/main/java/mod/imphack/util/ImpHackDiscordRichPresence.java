@@ -4,43 +4,55 @@ import club.minnced.discord.rpc.DiscordEventHandlers;
 import club.minnced.discord.rpc.DiscordRPC;
 import club.minnced.discord.rpc.DiscordRichPresence;
 import mod.imphack.Main;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiMainMenu;
 
 public class ImpHackDiscordRichPresence {
 	
-	private static final DiscordRichPresence discordRichPresence = new DiscordRichPresence();
-	private static final DiscordRPC discordRPC = DiscordRPC.INSTANCE;
+	 private static final DiscordRPC rpc;
+	    public static DiscordRichPresence presence;
+	    private static Thread thread;
+	    private static int index;
 
-	public static void start(String mode) {
-		DiscordEventHandlers eventHandlers = new DiscordEventHandlers();
-		eventHandlers.disconnected = ((var1, var2) -> System.out.println("Discord RPC disconnected, var1: " + var1 + ", var2: " + var2));
+	    static {
+	        index = 1;
+	        rpc = DiscordRPC.INSTANCE;
+	        presence = new DiscordRichPresence();
+	    }
+
+	public static void start() {
+        DiscordEventHandlers handlers = new DiscordEventHandlers();
+			rpc.Discord_Initialize("911730341708967946", handlers, true, "");
+
+			ImpHackDiscordRichPresence.presence.startTimestamp = Main.startTimeStamp / 1000L;
+			ImpHackDiscordRichPresence.presence.details = Minecraft.getMinecraft().currentScreen instanceof GuiMainMenu ? "In the main menu." : "Playing " + (Minecraft.getMinecraft().currentServerData != null ? (mod.imphack.module.modules.client.DiscordRPC.instance.showIp.isEnabled() ? "on " + Minecraft.getMinecraft().currentServerData.serverIP + "." : " multiplayer.") : " singleplayer.");
+			ImpHackDiscordRichPresence.presence.state = mod.imphack.module.modules.client.DiscordRPC.instance.state.getValue();
+			ImpHackDiscordRichPresence.presence.largeImageKey = "impbase";
+			ImpHackDiscordRichPresence.presence.largeImageText = Reference.NAME + " " + Reference.RELEASE_VERSION;
+			ImpHackDiscordRichPresence.presence.smallImageKey = "skyrim";
+			ImpHackDiscordRichPresence.presence.smallImageText = Reference.NAME + " " + Reference.RELEASE_VERSION;
+			rpc.Discord_UpdatePresence(presence);
 		
-		if(mode.equalsIgnoreCase("Imp")) {
-			String discordID = "870753739500290060";
-			discordRPC.Discord_Initialize(discordID, eventHandlers, true, null);
-
-			discordRichPresence.startTimestamp = System.currentTimeMillis() / 1000L;
-			discordRichPresence.details = Reference.NAME + " " + Reference.RELEASE_VERSION;
-			discordRichPresence.largeImageKey = "2b2t_-_spawnbase_2b2t-891";
-			discordRichPresence.largeImageText = Reference.NAME + " " + Reference.RELEASE_VERSION;
-			discordRichPresence.smallImageKey = "skyrim";
-			discordRichPresence.smallImageText = Reference.NAME + " " + Reference.RELEASE_VERSION;
-			discordRichPresence.state = null;
-		} else if (mode.equalsIgnoreCase("Vanilla")) {
-			
-			String discordID = "901118741436309505";
-			discordRPC.Discord_Initialize(discordID, eventHandlers, true, null);
-
-			discordRichPresence.startTimestamp = Main.startTimeStamp / 1000L;
-			discordRichPresence.details = null;
-			discordRichPresence.largeImageKey = "icon";
-			discordRichPresence.state = null;
+			  thread = new Thread(() -> {
+		            while (!Thread.currentThread().isInterrupted()) {
+		                rpc.Discord_RunCallbacks();
+		                ImpHackDiscordRichPresence.presence.details = Minecraft.getMinecraft().currentScreen instanceof GuiMainMenu ? "In the main menu." : "Playing " + (Minecraft.getMinecraft().currentServerData != null ? (mod.imphack.module.modules.client.DiscordRPC.instance.showIp.isEnabled() ? "on " + Minecraft.getMinecraft().currentServerData.serverIP + "." : " multiplayer.") : " singleplayer.");
+		                ImpHackDiscordRichPresence.presence.state = mod.imphack.module.modules.client.DiscordRPC.instance.state.getValue();
+		               
+		                rpc.Discord_UpdatePresence(presence);
+		                try {
+		                    Thread.sleep(2000L);
+		                } catch (InterruptedException interruptedException) {
+		                }
+		            }
+		        }, "RPC-Callback-Handler");
+		        thread.start();
 		}
-		
-		discordRPC.Discord_UpdatePresence(discordRichPresence);
-	}
 
-	public static void stop() {
-		discordRPC.Discord_Shutdown();
-		discordRPC.Discord_ClearPresence();
+	 public static void stop() {
+	        if (thread != null && !thread.isInterrupted()) {
+	            thread.interrupt();
+	        }
+	        rpc.Discord_Shutdown();
+	    }
 	}
-}

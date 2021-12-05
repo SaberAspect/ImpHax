@@ -10,6 +10,7 @@ import mod.imphack.util.font.FontUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -1164,12 +1165,21 @@ public class RenderUtil extends Tessellator {
 				start = -8;
 				break;
 			}
-			GlStateManager.pushMatrix();
-			GlStateManager.translate(x - mc.getRenderManager().viewerPosX, y + offset - mc.getRenderManager().viewerPosY,
-					z - mc.getRenderManager().viewerPosZ);
-			GlStateManager.rotate(-mc.getRenderManager().playerViewY, 0, 1, 0);
-			GlStateManager.rotate(mc.getRenderManager().playerViewX, mc.gameSettings.thirdPersonView == 2 ? -1 : 1, 0, 0);
-			GlStateManager.scale(-scale, -scale, scale);
+			
+			
+			 	GlStateManager.pushMatrix();
+		        RenderHelper.enableStandardItemLighting();
+		        GlStateManager.enablePolygonOffset();
+		        GlStateManager.doPolygonOffset(1.0f, -1500000.0f);
+		        GlStateManager.disableLighting();
+		        GlStateManager.translate(x - mc.getRenderManager().viewerPosX, y + offset - mc.getRenderManager().viewerPosY,
+						z - mc.getRenderManager().viewerPosZ);
+		        GlStateManager.rotate(-mc.getRenderManager().playerViewY, 0, 1, 0);
+		        GlStateManager.rotate(mc.getRenderManager().playerViewX, (mc.gameSettings.thirdPersonView == 2) ? -1 : 1, 0, 0);
+		        GlStateManager.scale(-scale, -scale, scale);
+		        GlStateManager.disableDepth();
+		        GlStateManager.enableBlend();
+		        
 			if (type == 2) {
 				double width = 0;
 				ColorUtil bcolor = new ColorUtil(255, 0, 200, 100);
@@ -1185,8 +1195,11 @@ public class RenderUtil extends Tessellator {
 				}
 				drawBorderedRect(-width - 1, -mc.fontRenderer.FONT_HEIGHT, width + 3, new ColorUtil(110, 4, 0, 100),
 						bcolor);
+		        GlStateManager.disableBlend();
+
 			}
 			GlStateManager.enableTexture2D();
+			
 			for (int i = 0; i < text.length; i++) {
 		        if(Main.moduleManager.getModule("ClientFont").isToggled()) {
 
@@ -1197,7 +1210,10 @@ public class RenderUtil extends Tessellator {
 							i * (mc.fontRenderer.FONT_HEIGHT + 1) + start, color);
 		        }
 			}
-			GlStateManager.disableTexture2D();
+			GlStateManager.enableDepth();
+	        GlStateManager.disableBlend();
+	        GlStateManager.disablePolygonOffset();
+	        GlStateManager.doPolygonOffset(1.0f, 1500000.0f);
 			if (type != 2) {
 				GlStateManager.popMatrix();
 			}

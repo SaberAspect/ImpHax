@@ -10,8 +10,8 @@ public class StringSetting extends Setting {
 	public StringSetting(String name, Module parent, String value) {
 		this.name = name;
 		this.parent = parent;
-		if (value == null)
-			this.value = value;
+		this.value = value;
+		
 	}
 
 	public String getValue() {

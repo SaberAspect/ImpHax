@@ -9,6 +9,7 @@ import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraftforge.fml.client.GuiModList;
 
 import org.lwjgl.opengl.GL11;
 
@@ -58,7 +59,10 @@ public class ImpHackSplashScreen extends GuiScreen {
 		this.buttonList.add(new SplashScreenButton(0, this.x, this.y, "Singleplayer"));
 		this.buttonList.add(new SplashScreenButton(1, this.x, this.y + 22, "Multiplayer"));
 		this.buttonList.add(new SplashScreenButton(2, this.x, this.y + 44, "Settings"));
-		this.buttonList.add(new SplashScreenButton(2, this.x, this.y + 66, "Exit"));
+		this.buttonList.add(new SplashScreenButton(2, this.x, this.y + 66, "Mods"));
+		this.buttonList.add(new SplashScreenButton(2, this.x, this.y + 88, "Exit"));
+
+
 		GlStateManager.disableTexture2D();
 		GlStateManager.enableBlend();
 		GlStateManager.disableAlpha();
@@ -111,6 +115,8 @@ public class ImpHackSplashScreen extends GuiScreen {
 				Minecraft.getMinecraft().fontRenderer.getStringWidth("Exit"),
 				Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT, mouseX, mouseY)) {
 			this.mc.shutdown();
+		} else if(ImpHackSplashScreen.isHovered(this.x, this.y+88, Minecraft.getMinecraft().fontRenderer.getStringWidth("Mods"), Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT, mouseX, mouseY)) {
+			this.mc.displayGuiScreen(new GuiModList(this));
 		}
 	}
 

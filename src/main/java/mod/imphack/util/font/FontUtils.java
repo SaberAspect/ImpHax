@@ -34,8 +34,12 @@ public class FontUtils {
 		}
 	}
 
-	public static void drawStringWithShadow(String text, double x, double y, int color) {
-
+	public static float drawStringWithShadow(boolean customFont, String text, float x, float y, int color) {
+		if (customFont) {
+			return Main.customFontRenderer.drawStringWithShadow(text, x, y, color);
+		} else {
+			return mc.fontRenderer.drawStringWithShadow(text, x, y, color);
+		}
 	}
 
 	public static float drawString(boolean customFont, String text, int x, int y, ColorUtil color) {

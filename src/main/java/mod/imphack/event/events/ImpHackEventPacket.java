@@ -55,4 +55,10 @@ public class ImpHackEventPacket extends ImpHackEventCancellable {
 	            super(packet);
 	        }
 	    }
+	    
+	    public static class Send_new extends ImpHackEventPacket {
+			public Send_new(Packet packet) {
+				super(packet);
+			}
+		}
 	}

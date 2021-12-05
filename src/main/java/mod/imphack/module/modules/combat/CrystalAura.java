@@ -73,14 +73,14 @@ public class CrystalAura extends Module {
 	BooleanSetting break_crystal = new BooleanSetting("Break", this, true);
     IntSetting break_trys = new IntSetting("Break Attempts", this, 1);
     BooleanSetting anti_weakness = new BooleanSetting("Anti-Weakness", this, true);
-    FloatSetting hit_range = new FloatSetting("Hit Range", this, 1f);
-    FloatSetting place_range = new FloatSetting("Place Range", this, 1f);
-    FloatSetting hit_range_wall = new FloatSetting("Range Wall", this, 1f);
+    FloatSetting hit_range = new FloatSetting("Hit Range", this, 4.5f);
+    FloatSetting place_range = new FloatSetting("Place Range", this, 3.5f);
+    FloatSetting hit_range_wall = new FloatSetting("Range Wall", this, 3.5f);
     IntSetting place_delay = new IntSetting("Place Delay", this, 0);
-    IntSetting break_delay = new IntSetting("Break Delay", this, 0);
-    IntSetting min_player_place = new IntSetting("Min Enemy Place", this, 0);
-    IntSetting min_player_break = new IntSetting("Min Enemy Break", this,  0);
-    IntSetting max_self_damage = new IntSetting("Max Self Damage", this,  0);
+    IntSetting break_delay = new IntSetting("Break Delay", this, 1);
+    IntSetting min_player_place = new IntSetting("Min Enemy Place", this, 6);
+    IntSetting min_player_break = new IntSetting("Min Enemy Break", this,  6);
+    IntSetting max_self_damage = new IntSetting("Max Self Damage", this,  8);
     ModeSetting rotate_mode = new ModeSetting("Rotate", this, "Good", "Good","Off", "Old", "Const");
     BooleanSetting raytrace = new BooleanSetting("Raytrace", this, false);
     ModeSetting switch_mode = new ModeSetting("Switch", this, "Swap", "Swap", "Silent", "Off");
@@ -89,7 +89,7 @@ public class CrystalAura extends Module {
     BooleanSetting client_side = new BooleanSetting("Client Side", this, false);
     BooleanSetting jumpy_mode = new BooleanSetting("Jumpy Mode", this, false);
     BooleanSetting attempt_chain = new BooleanSetting("Attemp Chain", this, false);
-    BooleanSetting anti_stuck = new BooleanSetting("Anti Stuck", this, false);
+    BooleanSetting anti_stuck = new BooleanSetting("Anti Stuck", this, true);
     BooleanSetting endcrystal = new BooleanSetting("1.13 Mode", this, false);
     BooleanSetting faceplace_mode = new BooleanSetting("FacePlace Mode", this, true);
     IntSetting faceplace_mode_damage = new IntSetting("T Health", this, 0);
@@ -166,9 +166,8 @@ public class CrystalAura extends Module {
 	        }
 	    });
 
-	    @EventHandler
-	    private final Listener<ImpHackEventPacket.SendPacket> send_listener = new Listener<>(event -> {
-	        if (event.getPacket() instanceof CPacketPlayer && is_rotating && rotate_mode.getMode().equalsIgnoreCase("Old")) {
+	    private final Listener<ImpHackEventPacket.Send_new> send_listener = new Listener<>(event -> {
+	        if (event.getPacket() instanceof CPacketPlayer && is_rotating && rotate_mode.is("Old")) {
 		        if (debug.isEnabled()) {
 	        		Client.addChatMessage("CrystalAura: Rotating");
 	        	}
@@ -179,7 +178,7 @@ public class CrystalAura extends Module {
 	            p.pitch = pitch;
 	            is_rotating = false;
 	        }
-	        if (event.getPacket() instanceof CPacketPlayerTryUseItemOnBlock && is_rotating && rotate_mode.getMode().equalsIgnoreCase("old")) {
+	        if (event.getPacket() instanceof CPacketPlayerTryUseItemOnBlock && is_rotating && rotate_mode.is("Old")) {
 	            final CPacketPlayerTryUseItemOnBlock p = (CPacketPlayerTryUseItemOnBlock) event.getPacket();
 	            
 		        if (debug.isEnabled()) {
@@ -212,7 +211,7 @@ public class CrystalAura extends Module {
 	    });
 
 	    @EventHandler
-	    private final Listener<ImpHackEventPacket.ReceivePacket> receive_listener = new Listener<>(event -> {
+	    private final Listener<ImpHackEventPacket.Receive_new> receive_listener = new Listener<>(event -> {
 	        if (event.getPacket() instanceof SPacketSoundEffect) {
 	            final SPacketSoundEffect packet = (SPacketSoundEffect) event.getPacket();
 
@@ -278,7 +277,6 @@ public class CrystalAura extends Module {
 	            do_ca();
 	        }
 
-	        if (mc.player.isDead || mc.player.getHealth() <= 0) ca_target = null;
 	    }
 
 	    
@@ -313,7 +311,7 @@ public class CrystalAura extends Module {
 	                if (player == mc.player || !(player instanceof EntityPlayer)) continue;
 
 
-	                if (player.getDistance(mc.player) >= 11) continue; // stops lag
+	                if (player.getDistance(mc.player) >= 11) continue; 
 
 	                final EntityPlayer target = (EntityPlayer) player;
 
@@ -437,17 +435,9 @@ public class CrystalAura extends Module {
 
 	        damage_blocks = sort_best_blocks(damage_blocks);
 
-	        if (!attempt_chain.isEnabled()) {
 	            return best_block;
-	        } else {
-	            if (damage_blocks.size() == 0) {
-	                return null;
-	            }
-	            if (damage_blocks.size() < current_chain_index) {
-	                return damage_blocks.get(0).getValue();
-	            }
-	            return damage_blocks.get(current_chain_index).getValue();
-	        }
+	       
+	            
 	    }
 
 	    public List<Key<Double, BlockPos>> sort_best_blocks(List<Key<Double, BlockPos>> list) {
@@ -598,9 +588,15 @@ public class CrystalAura extends Module {
 	        }
 
 	        Surround s = (Surround) Main.moduleManager.getModule("Surround");
+	        HoleFiller h = (HoleFiller) Main.moduleManager.getModule("HoleFiller");
+
 	        if (s.blocksSurround()) {
 	           
 	            return true;
+	        }
+	        
+	        if(h.isEnabled()) {
+	        	return true;
 	        }
 
 	       
